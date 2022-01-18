@@ -1,5 +1,5 @@
 <template>
-    <select @change="handleInput" class="form-control border-2" required="required">
+    <select @change="handleInput" class="form-control border-2" :required="required">
         <option value="">--Select Country</option>
         <option value="AFG">Afghanistan</option>
         <option value="ALA">Åland Islands</option>

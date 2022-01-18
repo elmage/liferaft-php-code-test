@@ -21,6 +21,9 @@ window.Vue = require('vue').default;
 
 Vue.component('page-component', require('./components/PageComponent.vue').default);
 
+import VueToast from 'vue-toast-notification';
+Vue.use(VueToast);
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
