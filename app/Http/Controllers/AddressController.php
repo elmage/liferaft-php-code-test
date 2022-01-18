@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SubmitContactRequest;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class AddressController extends Controller
 {
@@ -19,6 +19,15 @@ class AddressController extends Controller
             'key' => 'address.can_state_list'
         ]
     ];
+
+    private $file_name;
+    private $disk;
+
+    public function __construct()
+    {
+        $this->file_name = 'customers.txt';
+        $this->disk = Storage::disk('public');
+    }
 
     public function getStateListForCountry(string $country)
     {
@@ -37,6 +46,13 @@ class AddressController extends Controller
     public function save(SubmitContactRequest $request)
     {
         $validated = $request->validated();
-        dd($validated);
+
+        if (!$this->disk->exists($this->file_name)) {
+            $this->disk->put($this->file_name, json_encode($validated));
+        } else {
+            $this->disk->append($this->file_name, json_encode($validated));
+        }
+
+        return response()->json(['success' => true]);
     }
 }
