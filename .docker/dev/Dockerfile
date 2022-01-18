@@ -14,11 +14,7 @@ RUN a2enmod ssl && \
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-ARG USER
 ARG UID
-RUN useradd -G www-data,root -u $UID -d /home/$USER $USER
-RUN mkdir -p /home/$USER/.composer && \
-    chown -R $USER:$USER /home/$USER
 
 #update apache document root
 ENV APACHE_DOCUMENT_ROOT=/var/www/public
@@ -26,7 +22,7 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-av
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
 #install nvm
-ENV NVM_DIR /home/$USER/.nvm
+ENV NVM_DIR /root/.nvm
 RUN mkdir $NVM_DIR
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.39.1/install.sh | bash
 ENV NODE_VERSION v16.3.0
@@ -52,7 +48,5 @@ RUN npm i
 COPY . .
 RUN composer install
 RUN npm run dev
-
-USER $USER
 
 EXPOSE 80

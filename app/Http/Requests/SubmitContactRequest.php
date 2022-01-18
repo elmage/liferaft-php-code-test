@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use LVR\Phone\Phone;
 
 class SubmitContactRequest extends FormRequest
 {
@@ -26,9 +27,9 @@ class SubmitContactRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:191'],
             'email' => ['required', 'string', 'email', 'max:191'],
-            'phone' => ['required', 'string'],
+            'phone' => ['required', 'string', new Phone],
             'address' => ['required'],
-            'address.number' => ['required', 'string', 'max:20'],
+            'address.number' => ['required', 'integer'],
             'address.street' => ['required', 'string', 'max:191'],
             'address.city' => ['required', 'string', 'max:191'],
             'address.state' => ['required', 'string', 'max:191'],
