@@ -1,2 +1,21 @@
-# .dockerignore
 .git
+*.md
+!README*.md
+README-secret.md
+dump.rdb
+*.log
+.env
+npm-debug.log
+
+# Coverage directory used by tools like istanbul
+coverage
+
+# Dependency directories
+node_modules/
+vendor/
+
+# Optional npm cache directory
+.npm
+
+# macOS
+.DS_Store

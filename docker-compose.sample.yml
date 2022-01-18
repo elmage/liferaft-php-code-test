@@ -1,0 +1,57 @@
+version: '3.7'
+services:
+  liferaft:
+    container_name: liferaft
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: .docker/dev/Dockerfile
+      args:
+        - APP_ENV=staging
+        - USER=mage
+        - UID=1000
+    volumes:
+      - .:/var/www
+      - liferaft_nm:/var/www/node_modules
+    networks:
+      - liferaft_services
+    ports:
+      - 8080:80
+    expose:
+      - 80
+    depends_on:
+      - liferaft_db
+      - liferaft_db_test
+
+  liferaft_db:
+    container_name: liferaft_db
+    image: mysql:5.7
+    restart: always
+    ports:
+      - 3307:3306
+    expose:
+      - 3306
+    networks:
+      - liferaft_services
+    environment:
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - SERVICE_NAME=mysql
+
+  liferaft_db_test:
+    container_name: liferaft_db_test
+    image: mysql:5.7
+    restart: always
+    ports:
+      - 3308:3306
+    expose:
+        - 3306
+    networks:
+      - liferaft_services
+    environment:
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+
+networks:
+  liferaft_services:
+    external: true
